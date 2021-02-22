@@ -16,6 +16,7 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+
         logger.info("Hello Logback!");
 
         Logger logger1 = LoggerFactory.getLogger("com.nobody.Main");
@@ -24,11 +25,11 @@ public class Main {
         System.out.println(logger.getName());
         System.out.println(logger1.getName());
 
+        Logger rootLogger = LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+        rootLogger.info("rootLogger:{}", rootLogger.getName());
+
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         StatusPrinter.print(loggerContext);
-
-        Logger rootLogger = LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-        System.out.println(rootLogger.getName());
 
     }
 }

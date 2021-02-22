@@ -2,84 +2,80 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
     <property name="filters"
-        value="full,$Proxy,javax.crypto.Cipher,com.sun.,sun.reflect.,java.lang.reflect.,java.io.,java.net.,org.eclipse.jetty.,org.apache.cxf.,org.springframework.beans.,org.springframework.context.,org.apache.commons.httpclient.,org.apache.commons.pool.,org.apache.http.,io.netty.,org.junit.,org.apache.maven.,org.springframework.amqp.rabbit." />
-    <property name="layout" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level [%thread] [traceId-%X{traceId}] %logger{50}%n
+              value="full,$Proxy,javax.crypto.Cipher,com.sun.,sun.reflect.,java.lang.reflect.,java.io.,java.net.,org.eclipse.jetty.,org.apache.cxf.,org.springframework.beans.,org.springframework.context.,org.apache.commons.httpclient.,org.apache.commons.pool.,org.apache.http.,io.netty.,org.junit.,org.apache.maven.,org.springframework.amqp.rabbit."/>
+    <property name="layout"
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level [%thread] [traceId-%X{traceId}] %logger{50}%n
                 - %msg%n"/>
 
-	<property name="maxHistory" value="30" />
-	<property name="maxFileSize" value="50MB" />
-	
-	<appender name="console"
-		class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
+    <property name="maxHistory" value="30"/>
+    <property name="maxFileSize" value="50MB"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
             <pattern>${layout}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
-	</appender>
+    </appender>
 
-	<appender name="logFile"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>./logs/server.log</File>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>./logs/server%d{yyyy-MM-dd}_%i.log</FileNamePattern>
-			<MaxHistory>${maxHistory}</MaxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>${maxFileSize}</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder
-			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<charset>UTF-8</charset>
-			<pattern>${layout}</pattern>
-		</encoder>
-	</appender>
+    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>./logs/server.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>./logs/server%d{yyyy-MM-dd}_%i.log</FileNamePattern>
+            <MaxHistory>${maxHistory}</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${layout}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
-	<appender name="toLogFileAsync"
-		class="ch.qos.logback.classic.AsyncAppender">
-		<discardingThreshold>0</discardingThreshold>
-		<appender-ref ref="logFile" />
-	</appender>
+    <appender name="toLogFileAsync"
+              class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="logFile"/>
+    </appender>
 
-	<root level="INFO">
-		<appender-ref ref="toLogFileAsync" />
-		<appender-ref ref="console" />
-	</root>
-	
-	<!-- motan log -->
+    <root level="INFO">
+        <appender-ref ref="toLogFileAsync"/>
+        <appender-ref ref="console"/>
+    </root>
+
+    <!-- motan log -->
     <appender name="toMotanLog"
-        class="ch.qos.logback.core.rolling.RollingFileAppender">
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
         <File>./logs/motan.log</File>
         <rollingPolicy
-            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>./logs/motan.log.%d{yyyy-MM-dd}.%i
             </fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy
-                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>${maxFileSize}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder
-            class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <charset>UTF-8</charset>
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <Pattern>${layout}</Pattern>
             </layout>
         </encoder>
     </appender>
-    <appender name="toMotanLogAsync"
-        class="ch.qos.logback.classic.AsyncAppender">
+    <appender name="toMotanLogAsync" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
         <queueSize></queueSize>
-        <appender-ref ref="toMotanLog" />
+        <appender-ref ref="toMotanLog"/>
     </appender>
-	
-	<logger name="accessLog" level="INFO" additivity="false">
-        <appender-ref ref="toMotanLogAsync" />
+
+    <logger name="accessLog" level="INFO" additivity="false">
+        <appender-ref ref="toMotanLogAsync"/>
     </logger>
     <logger name="serviceStatsLog" level="INFO" additivity="false">
-        <appender-ref ref="toMotanLogAsync" />
+        <appender-ref ref="toMotanLogAsync"/>
     </logger>
 
 </configuration>
